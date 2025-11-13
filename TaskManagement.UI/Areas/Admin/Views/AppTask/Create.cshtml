@@ -1,0 +1,43 @@
+﻿
+@using TaskManagement.Application.Dtos
+@model AppTaskCreateRequest
+@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "İş Emri Ekleme Ekranı";
+}
+
+<form asp-action="Create" asp-controller="AppTask" asp-area="Admin" class="mt-3" method="post">
+
+
+    <div class="mb-3">
+        <label class="form-label"> iş Emri Başlığı :</label>
+        <input asp-for="Title" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label class="form-label"> iş Emri Açıklaması :</label>
+        <textarea asp-for="Description" class="form-control">  </textarea>
+       
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Öncelik :</label>
+        <select class="form-control" asp-for="PriorityId" asp-items="@ViewBag.Priorities">
+
+   </select>    
+   </div>
+
+
+    <div class="form-floating mb-3 btn-lg d-grid gap-2">
+
+        <button class="btn btn-info" type="submit">Kaydet </button>
+        <a asp-action="Index" asp-controller="AppTask" asp-area="Admin" class="btn btn-secondary" type="submit">Vazgeç </a>
+
+    </div>
+
+
+
+    <div asp-validation-summary="All" class="text-bg-danger lead">
+    </div>
+
+
+</form>

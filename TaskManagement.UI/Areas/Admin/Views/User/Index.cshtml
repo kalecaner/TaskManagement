@@ -1,0 +1,93 @@
+﻿@using TaskManagement.UI.Models
+@model UserListPagedVM
+@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Kullanıcı Ekranı";
+}
+<form asp-action="Index" asp-controller="User" asp-area="Admin">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="searchString" placeholder="Kullanıcı Ara" aria-label="İş Emri Ara" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Ara</button>
+    </div>
+</form>
+
+<a asp-action="Create" asp-controller="User" asp-area="Admin">Kullanıcı Ekle</a>
+
+@{
+
+    if (!string.IsNullOrEmpty(ViewBag.searchString))
+    {
+        <div class="row">
+            <div class="alert alert-secondary" role="alert">
+                Şuanda <strong> @ViewBag.searchString  </strong> filtresine göre kayıtlar görüntülenmektedir.
+                <a asp-action="Index" asp-controller="User" asp-route-searchString="" asp-area="Admin" class="float-end"> Filtreyi Kaldır</a>
+            </div>
+        </div>
+    }
+}
+
+
+
+<table class="table table-sm mt-2">
+    <thead>
+        <tr>
+
+            <th scope="col">Adı</th>
+            <th scope="col">Soyadı</th>
+            <th scope="col">Kullanıcı Adı</th>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Users.Count > 0)
+        {
+            foreach (var item in Model.Users)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Surname</td>
+                    <td>@(item.Username)</td>                   
+                    <td>
+                        <form  method="post" class="small">
+                            @Html.AntiForgeryToken()
+                            <button asp-area="Admin" asp-controller="User" asp-action="SendPasswordReset"
+                                    asp-route-id="@item.Username" type="submit" class="btn btn-primary btn-sm">
+                                Parola Sıfırlama
+                            </button>
+                            <a asp-action="Update" asp-controller="User" asp-area="Admin" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Güncelle</a>
+                            
+
+                        </form>
+                        <a asp-action="Delete" onclick="return confirm('Silme işleminden emin misiniz?')" asp-controller="User" asp-area="Admin" asp-route-id="@item.Id" class=" btn btn-danger btn-sm">Sil</a>
+                         </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">Herhangi bir Kullanıcı bulunamadı.</td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
+<div class="float-end">
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.ActivePage) == i ? "active" : "")"><a class="page-link" asp-route-searchString=@ViewBag.searchString asp-route-activePage="@i" asp-action="Index" asp-controller="User">@i</a></li>
+
+            }
+
+
+
+        </ul>
+    </nav>
+</div>

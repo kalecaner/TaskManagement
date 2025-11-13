@@ -1,0 +1,87 @@
+﻿@using TaskManagement.Application.Dtos
+@model PagedResult<AppTaskDto>
+@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "İş Emri Tanımlama Ekranı";
+}
+<form asp-action="Index" asp-controller="AppTask" asp-area="Admin" >
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="searchString" placeholder="İş Emri Ara" aria-label="İş Emri Ara" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Ara</button>
+    </div>
+</form>
+
+<a asp-action="Create" asp-controller="AppTask" asp-area="Admin">Yeni İş Emri Ekle</a>
+
+@{
+
+    if(!string.IsNullOrEmpty(ViewBag.searchString))
+    {
+        <div class="row">
+            <div class="alert alert-secondary" role="alert">
+                Şuanda <strong> @ViewBag.searchString  </strong> filtresine göre kayıtlar görüntülenmektedir.
+                <a asp-action="Index"  asp-controller="AppTask" asp-route-searchString="" asp-area="Admin" class="float-end"> Filtreyi Kaldır</a>
+            </div>
+        </div>
+    }
+}
+ 
+
+
+<table class="table table-sm mt-2">
+    <thead>
+        <tr>
+
+            <th scope="col">İş Emri</th>            
+            <th scope="col">Aciliyet</th>
+            <th scope="col">Durum</th>
+            <th scope="col">Görevli</th>
+            <th scope="col">İşlemler</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model?.Data.Count > 0)
+        {
+            foreach (var item in Model.Data)
+            {
+                <tr>
+                    <td>@item.Title</td>                   
+                    <td>@item.PriorityDefinition</td>
+                    <td>@(item.State ? "Tamamlandı" : "Tamamlanmadı")</td>
+                    <td>@(item.AppUserId.HasValue ? item.AppFullname : "Atama yok")</td>
+                    <td>
+                        <a asp-action="Detail" asp-controller="AppTask" asp-area="Admin" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Detay</a>
+                        <a asp-action="Update" asp-controller="AppTask" asp-area="Admin" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Güncelle</a>
+                        <a asp-action="Delete" onclick="return confirm('Silme işleminden emin misiniz?')" asp-controller="AppTask" asp-area="Admin" asp-route-id="@item.Id" class=" btn btn-danger btn-sm">Sil</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">Herhangi bir iş emri tanımı bulunamadı.</td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
+<div class="float-end">
+    
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            
+            @for(int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.ActivePage == i ? "active" : "")"><a class="page-link" asp-route-searchString=@ViewBag.searchString asp-route-activePage="@i" asp-action="Index" asp-controller="AppTask">@i</a></li>
+               
+            }
+
+           
+           
+        </ul>
+    </nav>
+</div>
