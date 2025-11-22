@@ -22,7 +22,7 @@ namespace TaskManagement.Application.Requests
 	public record ResetPasswordRequest(string Token,string NewPassword):IRequest<Result<NoData>>;
 	public record GetUserByIdRequest(int UserId):IRequest<Result<UpdateDto?>>;
 	public record UpdateUserRequest(int Id,string? Username,string? Email,string? Name, string? Surname, int RoleId):IRequest<Result<NoData>>;
-	 public record DeleteUserRequest(int UserId):IRequest<Result<NoData>>;
-
+	public record DeleteUserRequest(int UserId):IRequest<Result<NoData>>;
+	public record UpdateProfileDataRequest(int UserId, string? Name, string? Surname, string? Password, string? ConfirmPassword, string Email) : IRequest<Result<NoData>>;
 
 }

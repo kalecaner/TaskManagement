@@ -43,6 +43,7 @@ namespace TaskManagement.Persistance
             services.Configure<SmtpSettings>(configuration.GetSection("Smtp"));
             services.AddScoped<IResetLinkBuilder, ResetLinkBuilder>();
             services.AddScoped<IEmailSender, SmtpEmailSender>();
+			services.AddScoped<INotificationRepository, NotificationRepository>();
 
 
         }

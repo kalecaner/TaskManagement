@@ -9,10 +9,10 @@ using TaskManagement.Application.Results;
 using TaskManagement.Domain.Entities;
 using TaskManagement.UI.Models;
 
-namespace TaskManagement.UI.Areas.Admin.Controllers
+namespace TaskManagement.UI.Areas.Member.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area("Member")]
+    [Authorize(Roles = "Member")]
 
     public class AppTaskController : Controller
     {
@@ -29,59 +29,7 @@ namespace TaskManagement.UI.Areas.Admin.Controllers
             var result = await _mediator.Send(new AppTaskListRequest(activePage,searchString));
             return View(result);
         }
-        public  async Task<IActionResult> Create()
-        {
-             var result = await _mediator.Send(new PriorityListRequest());
-            ViewBag.Priorities =  new List<SelectListItem>(
-                result.data.Select(x => new SelectListItem
-                {
-                    Text = x.Definition,
-                    Value = x.Id.ToString()
-                })
-            );
-
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(AppTaskCreateRequest request)
-        {
-            
-         
-
-            var result = await _mediator.Send(request);
-            ViewBag.Priorities = new List<SelectListItem>(result.data.Priorities.Select(x => new SelectListItem
-            {    Text = x.Definition,
-                 Value = x.Id.ToString()
-             })
-         );
-            if (result.isSuccess)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if (result.Errors.Count>0)
-                {
-                    result.Errors.ForEach(x => ModelState.AddModelError(x.PropertyName, x.ErrorMessage));
-                    
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "System error Contact Your IT department");
-                  
-                }
-                return View(request);
-            }
-
-            
-        }
-
-        public  async Task<IActionResult> Delete(int id)
-        {
-           await _mediator.Send(new AppTaskDeleteRequest(id));
-            return RedirectToAction("Index");
-        }
+       
         public async Task<IActionResult> Update(int id)
         {
             var result = await _mediator.Send( new AppTaskGetByIdWithPriortyRequest(id));

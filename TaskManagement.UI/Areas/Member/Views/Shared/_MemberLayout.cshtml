@@ -18,12 +18,10 @@
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light">Start Bootstrap</div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Admin Dashboard" ? "active" : "")" asp-action="Index" asp-controller="Home"> Dashboard</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Aciliyet Tanımlama Ekranı" ? "active" : "")" asp-action="Index" asp-area="Admin" asp-controller="Priority">Aciliyet Durumları</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "İş Emri Tanımlama Ekranı" ? "active" : "")" asp-action="Index" asp-area="Admin" asp-controller="AppTask">İş Emirleri</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Kullanıcı Ekranı" ? "active" : "")" asp-action="Index" asp-area="Admin" asp-controller="User">Kullanıcılar</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Bildirim Ekranı" ? "active" : "")" asp-action="Index" asp-area="Admin" asp-controller="Notification">Bildirimler</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Profil Ekranı Ekranı" ? "active" : "")" asp-action="ProfileData" asp-area="Admin" asp-controller="User">Profil</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Dashboard" ? "active" : "")" asp-action="Index" asp-controller="Home"> Dashboard</a>                
+                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "İş Emri Görüntüleme Ekranı" ? "active" : "")" asp-action="Index" asp-area="Member" asp-controller="AppTask">İş Emirleri</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Bildirim Ekranı" ? "active" : "")" asp-action="Index" asp-area="Member" asp-controller="Notification">Bildirimler</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3 @(ViewBag.Title == "Profil Ekranı Ekranı" ? "active" : "")" asp-action="ProfileData" asp-area="Member" asp-controller="User">Profil</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" asp-action="Logout" asp-area="" asp-controller="Account">Çıkış Yap</a>
             </div>
         </div>

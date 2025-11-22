@@ -1,9 +1,9 @@
 ﻿@model DashboardVm
 @{
-    Layout = "_AdminLayout";
+    Layout = "_MemberLayout";
     ViewBag.Title = "Admin Dashboard";
 }
-<p>Admin Page</p>
+
 
     <div class="row">
         <div class="col-md-4 mb-4">
@@ -14,25 +14,13 @@
                 <div class="card-body">
                     <h5 class="card-title">İş Emri Sayısı</h5>
                     <p class="card-text">@Model.TaskCount</p>
-                <a asp-action="Index" asp-area="Admin" asp-controller="AppTask" class="btn btn-primary">İş Emirlerine Git</a>
+                <a asp-action="Index" asp-area="Member" asp-controller="AppTask" class="btn btn-primary">İş Emirlerine Git</a>
                 </div>
                 
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-header">
-                    Kullanıcılar
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Kullanıcı Sayısı</h5>
-                    <p class="card-text">@Model.UserCount</p>
-                <a asp-action="Index" asp-area="Admin" asp-controller="User" class="btn btn-primary">Kullanıcılara Git</a>
-                </div>
-                
-            </div>
-        </div>
+       
 
         <div class="col-md-4 mb-4">
             <div class="card text-center h-100">
@@ -42,7 +30,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Okunmamış Bildirim Sayısı</h5>
                     <p class="card-text">@Model.NotificationCount</p>
-                <a asp-action="Index" asp-area="Admin" asp-controller="Notification" class="btn btn-primary">Bildirimlere git</a>
+                <a asp-action="Index" asp-area="Member" asp-controller="Notification" class="btn btn-primary">Bildirimlere git</a>
                 </div>
                 
             </div>

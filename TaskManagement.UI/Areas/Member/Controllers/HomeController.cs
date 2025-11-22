@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using TaskManagement.Application.Requests;
 using TaskManagement.UI.Models;
 
-namespace TaskManagement.UI.Areas.Admin.Controllers
+namespace TaskManagement.UI.Areas.Member.Controllers
 {
-	[Area("Admin")]
-	[Authorize(Roles ="Admin")]
+	[Area("Member")]
+	[Authorize(Roles ="Member")]
 	public class HomeController : Controller
 	{
         private readonly IMediator _mediator;
@@ -18,7 +18,7 @@ namespace TaskManagement.UI.Areas.Admin.Controllers
             _mediator = mediator;
         }
 
-        [Area("Admin")]
+        [Area("Member")]
 		public async Task<IActionResult> Index()
 		{
 			var UserId = Convert.ToInt32(User.Claims.SingleOrDefault(c => c.Type == "UserId")?.Value);

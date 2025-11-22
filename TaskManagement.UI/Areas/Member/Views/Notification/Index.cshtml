@@ -1,0 +1,140 @@
+﻿@model List<NotificationVM>
+@{
+    Layout = "_MemberLayout"; // Varsayılan layoutunuzu kullanır
+    ViewBag.Title = "Bildirim Ekranı";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bildirim Sayfası</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Okunmamış bildirimler için özel stil */
+        .notification-unread {
+            background-color: #fff3cd; /* Sarımsı arka plan */
+            border-left: 5px solid #ffc107; /* Sol tarafta uyarı rengi çizgisi */
+        }
+        /* Okunmuş bildirimler için özel stil */
+        .notification-read {
+            background-color: #d1e7dd; /* Yeşile yakın arka plan */
+            border-left: 5px solid #000000; /* Sol tarafta koyu renk çizgisi */
+            opacity: 0.7; /* Hafif saydamlık */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">🔔 Bildirimler</h2>
+
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                // **Dinamik ID ve Sınıf Ataması:** Her bildirim için benzersiz ID oluşturulur
+                string cardId = $"notification-{item.Id}";
+                string cardClass = item.State ? "notification-read" : "notification-unread";
+                string isChecked = item.State ? "checked" : "";
+                string isCheckedLabel = item.State ? "Okundu" : "Okunmadı";
+
+                // Zaman farkı hesaplaması (önceki hata düzeltildi)
+                string timeAgo = ((DateTime.Now - item.CreatedDate).TotalMinutes.ToString("F0"));
+
+                <div class="card mb-3 p-3 shadow-sm notification-item @cardClass" id="@cardId">
+                    <div class="row align-items-center">
+                        <div class="col-10">                            
+                            <p class="card-text text-muted">Açıklama: @item.Description</p>
+                            <small class="text-secondary">@timeAgo dakika önce</small>
+                        </div>
+
+                        <div class="col-2 text-end">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       value=""
+                                       id="read-check-@item.Id"
+                                       @isChecked
+                                       onclick="updateNotificationStatus(this, '@cardId')">
+                                <label class="form-check-label" id="label-@item.Id" for="read-check-@item.Id">
+                                    @isCheckedLabel
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                Görüntülenecek bildirim bulunmamaktadır.
+            </div>
+        }
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        // GÖRSEL (UI) GÜNCELLEME İŞLEVİ
+        function updateUI(notificationId, isRead) {
+            const notificationCard = document.getElementById(notificationId);
+            if (isRead) {
+                notificationCard.classList.remove('notification-unread');
+                notificationCard.classList.add('notification-read');
+                
+            } else {
+                notificationCard.classList.remove('notification-read');
+                notificationCard.classList.add('notification-unread');
+                
+            }
+        }
+
+        // ANA BİLDİRİM GÜNCELLEME İŞLEVİ (FETCH API)
+        function updateNotificationStatus(checkbox, notificationId) {
+            const isRead = checkbox.checked;
+            const notificationDBId = notificationId.split('-')[1];
+            const label = document.getElementById("label-" + notificationDBId);
+            label.textContent = isRead ? "Okundu" : "Okunmadı";
+
+
+            // Controller metodu imzasına uygun URL: public async Task<IActionResult> Update(int Id, bool isRead)
+            const url = `/Member/Notification/UpdateIsRead/${notificationDBId}?isRead=${isRead}`;
+
+            // 1. Önce Hızlı Feedback İçin Görseli Güncelle
+            updateUI(notificationId, isRead);
+
+            // 2. Fetch API ile Sunucuya POST İsteği Gönder
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // Body boş olduğu için bu header zorunlu değildir, ancak standartlar için tutulur.
+                }
+            })
+            .then(response => {
+                if (response.status === 200 || response.status === 302) {
+                    console.log(`Bildirim ID: ${notificationDBId} ve durum: ${isRead} için güncelleme isteği başarılı.`);
+                } else {
+                    // Sunucudan hata gelirse
+                    throw new Error(`Sunucuya ulaşma hatası! Durum: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                console.error("Durum güncelleme hatası:", error);
+
+                // 3. Hata Durumunda Görseli ve Checkbox'ı Eski Haline Getir
+                checkbox.checked = !isRead;
+                updateUI(notificationId, !isRead); // UI'yi geri al
+
+                alert("Bildirim durumu güncellenirken bir hata oluştu. Lütfen tekrar deneyin.");
+            });
+        }
+    </script>
+</body>
+</html>

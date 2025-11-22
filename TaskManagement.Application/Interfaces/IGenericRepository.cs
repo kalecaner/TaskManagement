@@ -16,5 +16,6 @@ namespace TaskManagement.Application.Interfaces
         Task<int> SaveChangeAsync();
         Task<List<T>> GetListByFilterAsync(Expression<Func<T, bool>> filter);
         Task<List<T>> GetListAsNoTrackingByFilterAsync(Expression<Func<T, bool>> filter);
+        Task<int> CountByFilterAsync(Expression<Func<T, bool>> filter);
     }
 }

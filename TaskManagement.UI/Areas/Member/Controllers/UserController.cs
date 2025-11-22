@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using TaskManagement.Application.Requests;
 using TaskManagement.UI.Models;
 
-namespace TaskManagement.UI.Areas.Admin.Controllers
+namespace TaskManagement.UI.Areas.Member.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area("Member")]
+    [Authorize(Roles = "Member")]
     public class UserController : Controller
     {
         private readonly IMediator _mediator;
@@ -43,37 +43,7 @@ namespace TaskManagement.UI.Areas.Admin.Controllers
 
             }
 
-        }
-        public IActionResult Create()
-        {
-            CreateUserVM vm = new CreateUserVM();
-
-            return View(vm);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateUserVM userVM)
-        {
-            var result = await _mediator.Send(new CreateUserRequest(userVM.Username, userVM.Password, userVM.ConfirmPassword, userVM.Email, userVM.Name, userVM.Surname, userVM.RoleId));
-            if (result.isSuccess)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if (result.Errors.Count > 0)
-                {
-                    result.Errors.ForEach(x => ModelState.AddModelError(x.PropertyName, x.ErrorMessage));
-
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "System error Contact Your IT department");
-
-                }
-                return View(userVM);
-            }
-        }
+        }      
 
         public async Task<IActionResult> SendPasswordInfo(string id)
         {
@@ -143,27 +113,7 @@ namespace TaskManagement.UI.Areas.Admin.Controllers
             }
         }
 
-        public async Task<IActionResult> Delete(int id)
-        {
-            var result = await _mediator.Send(new DeleteUserRequest(id));
-            if (result.isSuccess)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if (result.Errors.Count > 0)
-                {
-                    result.Errors.ForEach(x => ModelState.AddModelError(x.PropertyName, x.ErrorMessage));
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "System error Contact Your IT department");
-                }
-                return RedirectToAction("Index");
-            }
-
-        }
+      
 
         public async Task<IActionResult> ProfileData()
         {

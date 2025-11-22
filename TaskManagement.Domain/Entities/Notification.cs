@@ -11,9 +11,9 @@ namespace TaskManagement.Domain.Entities
 		public string Description { get; set; }= null!;
 		public bool State { get; set; }
 		public int AppUserId { get; set; }
-
-		#region Navigation properties
-		public AppUser? AppUser { get; set; }
+		public DateTime CreatedDate { get; set; }
+        #region Navigation properties
+        public AppUser? AppUser { get; set; }
 
 		#endregion
 	}

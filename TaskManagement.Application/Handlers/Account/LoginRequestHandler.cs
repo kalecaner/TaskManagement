@@ -36,7 +36,7 @@ namespace TaskManagement.Application.Handlers.Account
 				if (User != null)
 				{
 					var type = (RoleType)User.AppRoleId;
-					return new Result<LoginResponseDto?>(new LoginResponseDto(User.Name, User.Surname, type), true, null, null);
+					return new Result<LoginResponseDto?>(new LoginResponseDto(User.Name, User.Surname,User.Id, type), true, null, null);
 				}
 				else
 				{

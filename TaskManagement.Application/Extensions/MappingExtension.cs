@@ -14,18 +14,18 @@ namespace TaskManagement.Application.Extensions
 {
 	public static class MappingExtension
 	{
-		public static AppUser ToMap(this RegisterRequest request,IUsernameNormalizer normalizer)
+		public static AppUser ToMap(this RegisterRequest request, IUsernameNormalizer normalizer)
 		{
 
-			 return AppUser.Create(
-                username: request.Username,
-				password:request.Password,
-				name:request.Name,
-				surname:request.Surname,
-				appRoleId:(int)RoleType.Member,
-				email:request.Email,
-				normalizer: normalizer
-                );
+			return AppUser.Create(
+			   username: request.Username,
+			   password: request.Password,
+			   name: request.Name,
+			   surname: request.Surname,
+			   appRoleId: (int)RoleType.Member,
+			   email: request.Email,
+			   normalizer: normalizer
+			   );
 		}
 		public static Priority ToMap(this PriorityCreateRequest request)
 		{
@@ -64,28 +64,39 @@ namespace TaskManagement.Application.Extensions
 				x.AppUser != null ? $"{x.AppUser.Name}" + " " + $"{x.AppUser.Surname}" : null
 				  )).ToList();
 		}
-		public static List<TaskReportListDto> ToMap(this List<TaskReport>  dto)
+		public static List<TaskReportListDto> ToMap(this List<TaskReport> dto)
 		{
 			return dto.Select(x => new TaskReportListDto(
-                      x.Id,
-                      x.Definition,
-                      x.Detail,
-                      x.AppTaskId
-                  )).ToList();
-        }
-        public static AppUser ToMap(this CreateUserRequest request, IUsernameNormalizer normalizer)
-        {
+					  x.Id,
+					  x.Definition,
+					  x.Detail,
+					  x.AppTaskId
+				  )).ToList();
+		}
+		public static AppUser ToMap(this CreateUserRequest request, IUsernameNormalizer normalizer)
+		{
 
-            return AppUser.Create(
-               username: request.Username,
-               password: request.Password,
-               name: request.Name,
-               surname: request.Surname,
-               appRoleId: (int)RoleType.Member,
-               email: request.Email,
-               normalizer: normalizer
-               );
-        }
+			return AppUser.Create(
+			   username: request.Username,
+			   password: request.Password,
+			   name: request.Name,
+			   surname: request.Surname,
+			   appRoleId: (int)RoleType.Member,
+			   email: request.Email,
+			   normalizer: normalizer
+			   );
+		}
 
-    }
+		public static Notification ToMap(this NotificationDto dto)
+		{
+			return new Notification
+			{
+				Description = dto.Description,
+				AppUserId = dto.AppUserId ?? 0,
+				State = dto.State,
+				CreatedDate = dto.CreatedDate
+			};
+		}
+		
+	}
 }

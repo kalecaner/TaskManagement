@@ -16,9 +16,10 @@ namespace TaskManagement.Persistance.Configuration
 			builder.Property(n => n.Description).IsRequired(true).HasMaxLength(500);
 			builder.Property(x=>x.AppUserId).IsRequired(true);
 			builder.Property(n => n.State).IsRequired(true);
+			builder.Property(n => n.CreatedDate).IsRequired(true);
 
 
-		}
+        }
 	}
 	
 }

@@ -1,0 +1,53 @@
+﻿@using TaskManagement.UI.Models
+
+@model AppTaskUpdateVM
+@{
+    Layout = "_MemberLayout";
+    ViewBag.Title = "İş Emri Detay Ekranı";
+}
+
+<form asp-action="Detail" asp-controller="AppTask" asp-area="Member" class="mt-3" method="get">
+
+
+    <div class="mb-3">
+        <label class="form-label"> iş Emri Başlığı :</label>
+        <input asp-for="Title" class="form-control" readonly disabled>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"> iş Emri Açıklaması :</label>
+        <textarea asp-for="Description" class="form-control" readonly disabled>  </textarea>
+
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Öncelik :</label>
+        <select class="form-control" asp-for="PriorityId" asp-items="@Model.Priorities" disabled>
+            <option value="" selected disabled hidden>Lütfen seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Görevli Personel :</label>
+
+        <select class="form-control" asp-for="AppUserId" asp-items="@Model.Users" disabled>
+            <option value="" selected disabled hidden>Lütfen seçiniz</option>
+        </select>
+    </div>
+
+
+    <div class="form-floating mb-3 btn-lg d-grid gap-2">
+
+        
+        <a asp-action="Index" asp-controller="AppTask" asp-area="Member" class="btn btn-secondary" type="Button">Geri Dön </a>
+
+    </div>
+
+
+
+    <div asp-validation-summary="All" class="text-bg-danger lead">
+    </div>
+
+
+</form>
+
+@await Component.InvokeAsync("TaskReports", new { appTaskId = Model.Id })

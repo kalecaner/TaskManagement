@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using TaskManagement.Application.Dtos;
 using TaskManagement.Application.Requests;
 using TaskManagement.UI.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TaskManagement.UI.Controllers
 {
@@ -16,6 +19,7 @@ namespace TaskManagement.UI.Controllers
     public class AccountController : Controller
 	{
 		private readonly IMediator _mediator;
+		
 
 		public AccountController(IMediator mediator)
 		{
@@ -35,9 +39,15 @@ namespace TaskManagement.UI.Controllers
 				if (result.data != null)
 				{
 					await SetAuthCookie(result.data,request.RememberMe);
-				}
-				
-				return RedirectToAction("Index", "Home", new {area="Admin"});
+                    return RedirectToAction("Index", "Home", new { area = result.data.Role.ToString() });
+                }
+				else
+				{
+                    ModelState.AddModelError("Login failed.", "Role failed");
+                }
+
+					return RedirectToAction("Index", "Home", new { area = result.data.Role.ToString() });
+                //return RedirectToAction("Index", "Home", new {area="Admin"});
 			}
 			else
 			{
@@ -126,12 +136,21 @@ namespace TaskManagement.UI.Controllers
 			}
                 return View(vm);
         }
+
+
+		
+
+
+
+
+
+
         private async Task  SetAuthCookie(LoginResponseDto? dto,bool rememberMe)
 		{
 			User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Name);
 			var claims = new List<Claim>
-		{
-			new Claim(ClaimTypes.Name, dto.Name),
+		{   new Claim("UserId", dto.UserId.ToString()),
+            new Claim(ClaimTypes.Name, dto.Name),
 			new Claim("FullName", dto.Name+" "+dto.Surname),
 			new Claim(ClaimTypes.Role, dto.Role.ToString()),
 		};
@@ -168,5 +187,6 @@ namespace TaskManagement.UI.Controllers
 				new ClaimsPrincipal(claimsIdentity),
 				authProperties);
 		}
+
 	}
 }

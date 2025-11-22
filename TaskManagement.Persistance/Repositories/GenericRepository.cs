@@ -65,5 +65,10 @@ namespace TaskManagement.Persistance.Repositories
         {
             return _context.SaveChangesAsync();
         }
+
+        public Task<int> CountByFilterAsync(Expression<Func<T, bool>> filter)
+        {
+            return _dbSet.CountAsync(filter);
+        }
     }
 }
